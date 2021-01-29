@@ -54,7 +54,7 @@ defmodule Day14 do
       {:mask, _value} ->
         0
 
-      {key, value} ->
+      {_key, value} ->
         Integer.undigits(value, 2)
     end)
     |> Enum.sum()
@@ -113,7 +113,7 @@ defmodule Day14 do
       {:mask, _value} ->
         0
 
-      {key, value} ->
+      {_key, value} ->
         Integer.undigits(value, 2)
     end)
     |> Enum.sum()
