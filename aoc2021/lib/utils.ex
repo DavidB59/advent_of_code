@@ -19,4 +19,37 @@ defmodule Utils do
     |> Enum.map(fn {k, v} -> {v, k} end)
     |> Map.new()
   end
+
+  def median([]), do: nil
+
+  def median(list) when is_list(list) do
+    midpoint =
+      (length(list) / 2)
+      |> Float.floor()
+      |> round
+
+    {l1, l2} =
+      Enum.sort(list)
+      |> Enum.split(midpoint)
+
+    case length(l2) > length(l1) do
+      true ->
+        [med | _] = l2
+        med
+
+      false ->
+        [m1 | _] = l2
+        [m2 | _] = Enum.reverse(l1)
+        mean([m1, m2])
+    end
+  end
+
+  def mean(list) when is_list(list), do: do_mean(list, 0, 0)
+
+  defp do_mean([], 0, 0), do: nil
+  defp do_mean([], t, l), do: t / l
+
+  defp do_mean([x | xs], t, l) do
+    do_mean(xs, t + x, l + 1)
+  end
 end
