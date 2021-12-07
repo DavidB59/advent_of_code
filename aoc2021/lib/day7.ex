@@ -31,19 +31,14 @@ defmodule Day7 do
   end
 
   def calculate_fuel_mean(input) do
-    mean1 = Utils.mean(input) |> floor() |> calculate_cost(input)
-    mean2 = Utils.mean(input) |> round() |> calculate_cost(input)
+    mean1 = input |> Utils.mean() |> floor() |> calculate_cost(input)
+    mean2 = input |> Utils.mean() |> ceil() |> calculate_cost(input)
     min(mean1, mean2)
   end
 
   def calculate_cost(mean, input) do
     input
-    |> Enum.map(fn x ->
-      diff = abs(x - mean)
-
-      0..diff
-      |> Enum.sum()
-    end)
+    |> Enum.map(fn x -> Enum.sum(0..abs(x - mean)) end)
     |> Enum.sum()
   end
 end

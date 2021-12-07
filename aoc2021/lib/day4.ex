@@ -74,7 +74,7 @@ defmodule Day4 do
 
       found ->
         board
-        |> Map.drop([number])
+        |> Map.delete(number)
         |> Map.put({number, :found}, found)
     end
   end
@@ -135,7 +135,7 @@ defmodule Day4 do
 
       winner ->
         boards
-        |> List.delete(winner)
+        |> Enum.reject(&(&1 == winner))
         |> remove_all_winners()
     end
   end
