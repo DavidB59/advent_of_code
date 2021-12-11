@@ -3,7 +3,7 @@ defmodule Utils do
     list |> Stream.with_index() |> Enum.reduce(%{}, fn {v, k}, acc -> Map.put(acc, k, v) end)
   end
 
-  def list_list_to_graph(list) do
+  def nested_list_to_xy_map(list) do
     list
     |> Enum.map(&Stream.with_index/1)
     |> Stream.with_index()

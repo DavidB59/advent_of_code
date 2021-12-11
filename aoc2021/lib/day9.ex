@@ -8,7 +8,7 @@ defmodule Day9 do
   end
 
   def parse(input) do
-    input |> Enum.map(&String.graphemes/1) |> Utils.list_list_to_graph()
+    input |> Enum.map(&String.graphemes/1) |> Utils.nested_list_to_xy_map()
   end
 
   def find_low_points(input) do

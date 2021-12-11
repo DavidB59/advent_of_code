@@ -32,7 +32,7 @@ defmodule Day4 do
       |> Enum.reject(&(&1 == ""))
       |> Enum.map(&String.to_integer/1)
     end)
-    |> Utils.list_list_to_graph()
+    |> Utils.nested_list_to_xy_map()
     |> Utils.exchange_key_value()
   end
 

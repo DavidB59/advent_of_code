@@ -25,3 +25,4 @@ aoc2021-*.tar
 
 # Temporary files for e.g. tests
 /tmp
+lib/notes
