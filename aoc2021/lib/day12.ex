@@ -36,7 +36,7 @@ defmodule Day12 do
   end
 
   def solve_part_one() do
-    test()
+    file()
     |> parse()
     |> build_path()
     |> List.flatten()
@@ -45,7 +45,7 @@ defmodule Day12 do
   end
 
   def solve_part_two() do
-    test()
+    file()
     |> parse()
     |> build_path_two()
     |> List.flatten()
