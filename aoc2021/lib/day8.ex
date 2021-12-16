@@ -10,11 +10,6 @@ defmodule Day8 do
   def parse(input) do
     input
     |> Enum.map(&String.split(&1, " | "))
-
-    # |>
-
-    # |> String.split(",")
-    # |> Enum.map(&String.to_integer/1)
   end
 
   def solve_part_one() do
@@ -54,11 +49,10 @@ defmodule Day8 do
   # je connais a,g,d,b
 
   def solve_line([entry, output]) do
-    line = (entry <> " " <> output) |> IO.inspect(label: "line")
-    one = line |> number_by_length(2) |> IO.inspect(label: "one")
-    four = line |> number_by_length(4) |> IO.inspect(label: "four")
-    seven = line |> number_by_length(3) |> IO.inspect(label: "seven")
-    # eight = line |> number_by_length(8) |> IO.inspect(label: "eight")
+    line = entry <> " " <> output
+    one = line |> number_by_length(2)
+    four = line |> number_by_length(4)
+    seven = line |> number_by_length(3)
 
     line =
       line
@@ -68,7 +62,7 @@ defmodule Day8 do
       |> List.delete(four)
       |> List.delete(seven)
 
-    nine = find_by_contain(line, 6, four) |> IO.inspect(label: "nine")
+    nine = find_by_contain(line, 6, four)
     three = find_by_contain(line, 5, seven)
 
     zero =
@@ -79,15 +73,14 @@ defmodule Day8 do
 
     a = seven -- one
     ag = nine -- four
-    g = (ag -- a) |> IO.inspect(label: "g")
+    g = ag -- a
     dg = three -- seven
     d = dg -- g
     bd = four -- one
-    b = (bd -- d) |> IO.inspect(label: "b")
-    beg = (zero -- seven) |> IO.inspect(label: "beg")
+    b = bd -- d
+    beg = zero -- seven
     be = beg -- g
     e = be -- b
-    # known - a,g,d,b,e
 
     six =
       Enum.filter(line, &(length(&1) == 6))
@@ -95,9 +88,8 @@ defmodule Day8 do
       |> List.delete(zero)
       |> List.delete(nine)
       |> List.first()
-      |> IO.inspect()
 
-    [a, b, d, e, e] |> IO.inspect()
+    [a, b, d, e, e]
     f = six -- List.flatten([a, b, d, e, g])
     c = one -- f
 
@@ -145,21 +137,14 @@ defmodule Day8 do
     file()
     |> parse()
     |> Enum.map(fn [_entry, output] = line ->
-      code = solve_line(line) |> IO.inspect(label: "code")
+      code = solve_line(line)
 
       output
       |> String.split(" ")
       |> Enum.map(&find_value(&1, code))
-      |> IO.inspect(label: "value")
       |> Enum.reduce("", fn number, acc -> acc <> "#{number}" end)
-      |> IO.inspect()
       |> String.to_integer()
     end)
     |> Enum.sum()
   end
 end
-
-# ["c", "f", "d", "b", "a", "e", "g"]
-
-# [1, 6, "cdgba", 5]
-# a - c - g - d - e
