@@ -18,7 +18,7 @@ defmodule Day17 do
     end
   end
 
-  def solve_part_two() do
+  def solve_part_two do
     start_x = minimum_start_x_velocity()
     y_velocities = @y_min..-@y_min
     x_velocities = start_x..@x_max
@@ -40,19 +40,15 @@ defmodule Day17 do
     reached_target?(x_vel, y_vel, x_pos, y_pos)
   end
 
-  def solve_part_one() do
+  def solve_part_one do
     start_x = minimum_start_x_velocity()
     y_velocities = @y_min..-@y_min
     x_velocities = start_x..@x_max
 
     Enum.reduce(y_velocities, 0, fn y, acc ->
-      highest_y =
-        Enum.reduce(x_velocities, 0, fn x, acc ->
-          highest_y = find_highest_y(x, y)
-          return_highest(highest_y, acc)
-        end)
-
-      return_highest(highest_y, acc)
+      x_velocities
+      |> Enum.reduce(&(&1 |> find_highest_y(y) |> return_highest(&2)))
+      |> return_highest(acc)
     end)
   end
 
