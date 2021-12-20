@@ -39,56 +39,62 @@ defmodule Day19 do
     zero = Map.get(map, 0)
     keys = Map.keys(map)
 
-    {zero, keys}
+    {zero, [], keys}
     |> align_all_point_to_first_scanner(map)
+    |> elem(0)
     |> Map.values()
     |> Enum.reduce([], fn [a, b], acc -> [a] ++ [b] ++ acc end)
     |> Enum.uniq()
     |> Enum.count()
   end
 
-  def to_distance_map(input) do
-    input
-    |> Enum.map(fn {key, value} -> {key, distance_by_scanner(value)} end)
-    |> Map.new()
+  def solve_part_two() do
+    map =
+      file()
+      |> parse()
+      |> to_distance_map()
+
+    zero = Map.get(map, 0)
+    keys = Map.keys(map)
+
+    {zero, [], keys}
+    |> align_all_point_to_first_scanner(map)
+    |> elem(1)
+    |> manhanattan_distance()
   end
 
-  def distance_by_scanner(beacon_list) do
-    Enum.reduce(beacon_list, %{}, fn beacon1, acc ->
-      Enum.reduce(beacon_list, %{}, fn
-        ^beacon1, acc ->
-          acc
+  def to_distance_map(input) do
+    Map.new(input, fn {key, value} -> {key, distance_by_scanner(value)} end)
+  end
 
-        beacon2, acc ->
-          key = Enum.sort([beacon1, beacon2])
-          d = distance_between_two_points(beacon1, beacon2)
+  def distance_by_scanner(map \\ %{}, beacons_list)
+  def distance_by_scanner(map, [_last]), do: map
 
-          Map.put(acc, d, key)
-      end)
-      |> Map.merge(acc)
+  def distance_by_scanner(map, [beacon1 | beacons_list]) do
+    beacons_list
+    |> Enum.reduce(%{}, fn beacon2, acc ->
+      points = [beacon1, beacon2]
+      d = distance_between_two_points(beacon1, beacon2)
+      Map.put(acc, d, points)
     end)
+    |> Map.merge(map)
+    |> distance_by_scanner(beacons_list)
   end
 
   def distance_between_two_points([x1, y1, z1], [x2, y2, z2]) do
     (:math.pow(x2 - x1, 2) + :math.pow(y2 - y1, 2) + :math.pow(z2 - z1, 2)) |> :math.sqrt()
   end
 
-  def align_all_point_to_first_scanner({map, []}, _original_map), do: map
+  def align_all_point_to_first_scanner({map, moves, []}, _original_map), do: {map, moves}
 
-  def align_all_point_to_first_scanner({map, key_later}, original_map) do
-    Enum.reduce(key_later, {map, []}, fn key, {acc, key_later} ->
-      scanner = Map.get(original_map, key)
+  def align_all_point_to_first_scanner({map, moves, scanners}, original_map) do
+    Enum.reduce(scanners, {map, moves, []}, fn key, {distances, moves, non_matching_scanners} ->
+      case align_point_from_scanner_1_to_2(distances, Map.get(original_map, key)) do
+        :try_later ->
+          {distances, moves, [key | non_matching_scanners]}
 
-      if scanner do
-        result = align_point_from_scanner_1_to_2(acc, Map.get(original_map, key))
-
-        if result == :try_later do
-          {acc, [key | key_later]}
-        else
-          {result, key_later}
-        end
-      else
-        {acc, key_later}
+        {distances, move} ->
+          {distances, [move | moves], non_matching_scanners}
       end
     end)
     |> align_all_point_to_first_scanner(original_map)
@@ -133,7 +139,7 @@ defmodule Day19 do
 
         reoriented = apply_list_operation_to_point(common_point_2, op_list)
 
-        move = move_to_origin_scanner1(common_point_1, reoriented) |> IO.inspect(label: "move")
+        move = move_to_origin_scanner1(common_point_1, reoriented)
 
         list_points2 =
           distance_map2
@@ -153,11 +159,13 @@ defmodule Day19 do
           |> Enum.reduce([], fn [a, b], acc -> [a] ++ [b] ++ acc end)
           |> Enum.uniq()
 
-        (list_points1 ++ list_points2)
-        |> Enum.uniq()
-        |> distance_by_scanner
+        distances =
+          (list_points1 ++ list_points2)
+          |> Enum.uniq()
+          |> distance_by_scanner
 
-      # try later
+        {distances, move}
+
       _ ->
         :try_later
     end
