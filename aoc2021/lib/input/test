@@ -1,136 +1,253 @@
---- scanner 0 ---
-404,-588,-901
-528,-643,409
--838,591,734
-390,-675,-793
--537,-823,-458
--485,-357,347
--345,-311,381
--661,-816,-575
--876,649,763
--618,-824,-621
-553,345,-567
-474,580,667
--447,-329,318
--584,868,-557
-544,-627,-890
-564,392,-477
-455,729,728
--892,524,684
--689,845,-530
-423,-701,434
-7,-33,-71
-630,319,-379
-443,580,662
--789,900,-551
-459,-707,401
+inp w ----------------------------- 1
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w => x = 0
+eql x 0 => x = 1
+mul y 0 => y = 0
+add y 25 => y = 25
+mul y x => y = 25
+add y 1 => y = 26
+mul z y => z = 0
+mul y 0  => y = 0da
+add y w  => y = INPUT
+add y 6 => y = input + 6
+mul y x  => y = input + 6 ( si x = 1)
+add z y => z = input + 6
+inp w  ----------------------------- 2
+mul x 0 => x = 0
+add x z => x = z
+mod x 26 => mod de Z -> if z = 26 ! impossible, x = z
+div z 1 => sert a rien
+add x 13 => z + 13
+eql x w  => x = 0 ( impossible x = q)
+eql x 0 => x = 1 ( car x =0)
+mul y 0  => y = 0
+add y 25 => y = 25
+mul y x => y = 25 ( y * 1)
+add y 1 => y = 26
+mul z y => z = z * y ! ( = 26 * (input+6)) = multiple de 26 !
+mul y 0  => y = 0
+add y w => y = w ( input2 )
+add y 14  => y = input2 + 14
+mul y x    => y = input2 + 14 ( x = 1)
+add z y => z = z1  + (input2 +14) ( z1 = 26*(input1+6) )
+inp w  ----------------------------- 3
+mul x 0 => x = 0
+add x z => x = z
+mod x 26 x = reste de` z, if z = 26, x = 0, x = 14 ( z = 26k + input2+14) -> reste = input2 +14 / input1 is irrelevant
+div z 1 -> useless
+add x 15 x = 15 + reste
+eql x w => x = 0
+eql x 0 => x = 1
+mul y 0 => y = 0
+add y 25 => y = 25 
+mul y x => y = 25 
+add y 1 => y = 26
+mul z y => z = 26k k =z / z = 26 * (z1  + (input2 +14) )
+mul y 0 => y = 0
+add y w => y = input3
+add y 14 => y = input3 + 14
+mul y x  => y = input3 + 14
+add z y  => z 
 
---- scanner 1 ---
-686,422,578
-605,423,415
-515,917,-361
--336,658,858
-95,138,22
--476,619,847
--340,-569,-846
-567,-361,727
--460,603,-452
-669,-402,600
-729,430,532
--500,-761,534
--322,571,750
--466,-666,-811
--429,-592,574
--355,545,-477
-703,-491,-529
--328,-685,520
-413,935,-424
--391,539,-444
-586,-435,557
--364,-763,-893
-807,-499,-711
-755,-354,-619
-553,889,-390
-
---- scanner 2 ---
-649,640,665
-682,-795,504
--784,533,-524
--644,584,-595
--588,-843,648
--30,6,44
--674,560,763
-500,723,-460
-609,671,-379
--555,-800,653
--675,-892,-343
-697,-426,-610
-578,704,681
-493,664,-388
--671,-858,530
--667,343,800
-571,-461,-707
--138,-166,112
--889,563,-600
-646,-828,498
-640,759,510
--630,509,768
--681,-892,-333
-673,-379,-804
--742,-814,-386
-577,-820,562
-
---- scanner 3 ---
--589,542,597
-605,-692,669
--500,565,-823
--660,373,557
--458,-679,-417
--488,449,543
--626,468,-788
-338,-750,-386
-528,-832,-391
-562,-778,733
--938,-730,414
-543,643,-506
--524,371,-870
-407,773,750
--104,29,83
-378,-903,-323
--778,-728,485
-426,699,580
--438,-605,-362
--469,-447,-387
-509,732,623
-647,635,-688
--868,-804,481
-614,-800,639
-595,780,-596
-
---- scanner 4 ---
-727,592,562
--293,-554,779
-441,611,-461
--714,465,-776
--743,427,-804
--660,-479,-426
-832,-632,460
-927,-485,-438
-408,393,-506
-466,436,-512
-110,16,151
--258,-428,682
--393,719,612
--211,-452,876
-808,-476,-593
--575,615,604
--485,667,467
--680,325,-822
--627,-443,-432
-872,-547,-609
-833,512,582
-807,604,487
-839,-516,451
-891,-625,532
--652,-548,-490
-30,-46,-14
+inp w ----------------------------- 4
+mul x 0 => x = 0 
+add x z => x = z
+mod x 26 => x = reste de z, given that z is a multple of 26
+div z 26 z = 26k + input3 + 14. => divisé par 26 = k ( go back to previous z)
+add x - 8 => x - 8 ( x possible négatif ?) -> nul si PREVIOUS = 3 and HERE = 9
+eql x w => 0/1
+eql x 0 => 0/1
+mul y 0
+add y 25 `
+mul y x => x =0 => y =0
+add y 1 => y = 1
+mul z y => z = z
+mul y 0 -> 0
+add y w -> input5
+add y 10 -> input5 + 10
+mul y x -> 0 
+add z y -> add 0
+inp w ----------------------------- 5
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 13 
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 9
+mul y x
+add z y
+inp w ----------------------------- 6
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 15
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 12
+mul y x
+add z y
+inp w ----------------------------- 7
+mul x 0
+add x z
+mod x 26
+div z 26 -> go back one step
+add x -11 -> possible x 0
+eql x w -> 0
+eql x 0 -> 0
+mul y 0
+add y 25
+mul y x -> y = 0 
+add y 1 -> y =1
+mul z y -> z = z
+mul y 0 => 0
+add y w => y = input
+add y 8 => y = input +8
+mul y x => y x x = 0
+add z y => z = z
+inp w ------------------------ 8
+mul x 0
+add x z
+mod x 26
+div z 26 osef ? (?) = 0 if z < 26 ! go back one step
+add x -4 -> si 0 
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 13
+mul y x
+add z y
+inp w ------------------------ 9
+mul x 0
+add x z
+mod x 26
+div z 26 -> go back one step
+add x -15 -> 0 !
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 12
+mul y x
+add z y
+inp w ------------------------ 10
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 14
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 6
+mul y x
+add z y
+inp w -------------------- 11
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 14
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 9
+mul y x
+add z y
+inp w ---------------------- 12
+mul x 0
+add x z
+mod x 26
+div z 26 osef ? (?) = 0 if z < 26 ! go back one step
+add x -1 -> poss 0 !
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 15
+mul y x
+add z y
+inp w ----------------------------- 13
+mul x 0 => x = 0
+add x z => x = z
+mod x 26 => x = reste de mod 26
+div z 26 => osef ? (?) = 0 if z < 26 !
+add x -8 => reste de mod 26 - 8 -> poss 0 !
+eql x w => 1/0
+eql x 0  =>  1/0
+mul y 0 => y = 0 
+add y 25 => y = 25
+mul y x => y = y ou y = 0
+add y 1 => y + 1
+mul z y = z * y / ( z = whatever)
+mul y 0 => y = 0
+add y w => y = input
+add y 4 => y = input + 4
+mul y x => y * x (x = 0/1)
+add z y => z + y
+inp w --------------------------------- 14
+mul x 0 x => 0
+add x z x => x = z
+mod x 26 x => x = reste de mod26 
+div z 26 => osef ? (?) = 0 if z < 26 !
+add x -14 => reste de mod26(z) - 14 -> poss 0 !
+eql x w => x = 0 if x = input
+eql x 0 => x = 0 if x = input sinon c'est 1
+mul y 0 => y = 0
+add y 25 => y = 25
+mul y x => y = 0 if x = 0
+add y 1 => y = 1
+mul z y => z * y
+mul y 0 => y = 0
+add y w => y = y + input
+add y 10 => y = y +10 
+mul y x => y * x -> si x = 0, z y = 0
+add z y => z + y

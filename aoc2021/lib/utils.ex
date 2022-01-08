@@ -9,7 +9,7 @@ defmodule Utils do
     |> Stream.with_index()
     |> Enum.reduce(%{}, fn {list, x}, acc ->
       Enum.reduce(list, acc, fn {value, y}, acc ->
-        Map.put(acc, {x, y}, value)
+        Map.put(acc, {y, x}, value)
       end)
     end)
   end
