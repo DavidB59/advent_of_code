@@ -1,73 +1,71 @@
 defmodule Day24 do
   def file, do: Parser.read_file("day24")
   def test, do: Parser.read_file("test")
-  def first, do: Parser.read_file("first")
 
   @variable ["x", "y", "w", "z"]
-  @largest_14_digits 99_399_999_999_999
-  # @largest_14_digits 55_555_555_555_555
 
+  # 1 ===> 9
+  # 2 ===> 9
+  # 3 ===> 3
+  # 4 ===> 9
+  # 5 ===> 4
+  # 6 ===> 8
+  # 7 ===> 9
+  # 8 ===> 9
+  # 9 ===> 8
+  # 10 ==> 9
+  # 11 ==> 1
+  # 12 ==> 9
+  # 13 ==> 7
+  # 14 ==> 1
+
+  # => solution part1 99394899891971
+
+  # 1 ===> 9
+  # 2 ===> 2
+  # 3 ===> 1
+  # 4 ===> 7
+  # 5 ===> 1
+  # 6 ===> 1
+  # 7 ===> 2
+  # 8 ===> 6
+  # 9 ===> 1
+  # 10 ==> 3
+  # 11 ==> 1
+  # 12 ==> 9
+  # 13 ==> 1
+  # 14 ==> 1
+
+  # => solution part2 92171126131911
+
+  # rules ( obtained by reading the ALU program )
+  # input3 + 6 = input4
+  # input6 + 1 = input7
+  # input8 = input5 + 5
+  # input2 - 1 =  input9
+  # input11 + 8 = input 12
+  # input10 -2 = input 13
+  # input1 -8 = input14
+
+  # code only serve to verify solution.
   @map %{"x" => 0, "y" => 0, "z" => 0, "w" => 0}
   def parse(input) do
     input
   end
 
   def solve_part_one() do
-    # model_number = input |> Integer.digits()
     instructions = file()
-    IO.inspect(label: "here")
-    find_largest_number(instructions)
-    # run_program(@map, instructions, model_number)
-  end
-
-  def find_largest_number(instructions, model_number \\ @largest_14_digits) do
+    model_number = 92_171_126_131_911
     input_list = model_number |> Integer.digits()
-
-    if Enum.member?(input_list, 0) do
-      find_largest_number(instructions, model_number - 1)
-    else
-      # IO.inspect(model_number, label: "inspect one")
-      map = run_program(@map, instructions, input_list)
-      %{"z" => z} = map
-      # IO.inspect(model_number, label: "number ")
-
-      if z == 0 and !Enum.member?(input_list, 0) do
-        model_number
-      else
-        # IO.inspect(map, label: "model_number: #{model_number} => ")
-        find_largest_number(instructions, model_number - 1)
-      end
-    end
+    run_program(@map, instructions, input_list)
   end
 
-  def for_one_number() do
+  def solve_part_two() do
     instructions = file()
-    run_program2(@map, instructions)
+    model_number = 92_171_126_131_911
+    input_list = model_number |> Integer.digits()
+    run_program(@map, instructions, input_list)
   end
-
-  def complete_to_fourten(list) do
-    if Enum.count(list) == 14 do
-      list
-    else
-      [0 | list] |> complete_to_fourten()
-    end
-  end
-
-  def run_program2(map, [head | rest]) do
-    if String.starts_with?(head, "inp") do
-      map
-      |> apply_instruction(head, "input")
-      # |> IO.inspect(label: "#{head}: ")
-      |> run_program2(rest)
-    else
-      map
-      |> apply_instruction(head)
-      # |> IO.inspect(label: "#{head}: ")
-      |> run_program2(rest)
-    end
-  end
-
-  def run_program2(map, _), do: map
 
   def run_program(map, [head | rest], input_list) do
     if String.starts_with?(head, "inp") do
@@ -75,12 +73,10 @@ defmodule Day24 do
 
       map
       |> apply_instruction(head, input)
-      # |> IO.inspect(label: "#{head}: ")
       |> run_program(rest, rest_input)
     else
       map
       |> apply_instruction(head)
-      # |> IO.inspect(label: "#{head}: ")
       |> run_program(rest, input_list)
     end
   end
@@ -88,11 +84,10 @@ defmodule Day24 do
   def run_program(map, _, _input), do: map
 
   def apply_instruction(map, "inp " <> a, input) do
-    # value = IO.gets("") |> String.trim("\n") |> String.to_integer()
-
     Map.put(map, a, input)
   end
 
+  @spec apply_instruction(map, <<_::32, _::_*8>>) :: map
   def apply_instruction(map, "add " <> a_space_b) do
     [a, b] = get_a_b(a_space_b)
     b = determine_b(b, map)
@@ -130,12 +125,9 @@ defmodule Day24 do
     val_b = determine_b(b, map)
     val_a = Map.get(map, a)
     new_val_a = if val_a == val_b, do: 1, else: 0
-    # if a == "x" and b == "w", do: IO.inspect({new_val_a, val_a, val_b}, label: "eql x w ")
     %{map | a => new_val_a}
   end
 
   def get_a_b(a_space_b), do: String.split(a_space_b, " ")
   def determine_b(b, map), do: if(b in @variable, do: Map.get(map, b), else: String.to_integer(b))
 end
-
-# XX39

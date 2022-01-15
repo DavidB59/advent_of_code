@@ -1,0 +1,265 @@
+inp w --------------------------------------------- 1
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w -> y = w
+add y 6 => y = w + 6
+mul y x 
+add z y => z = input1 + 6
+inp w --------------------------------------------- 2
+mul x 0 
+add x z
+mod x 26 => x = 0 
+div z 1 
+add x 13 => x = 13
+eql x w => x = 0
+eql x 0 => x = 1
+mul y 0 
+add y 25
+mul y x
+add y 1 => y = 26
+mul z y => z = 26(input1 + 6)
+mul y 0
+add y w
+add y 14 => y = input2 + 14
+mul y x 
+add z y => z = 26(input1 + 6) + input2 + 14
+inp w --------------------------------------------- 3
+mul x 0 
+add x z
+mod x 26 => x = inpt2 + 14
+div z 1
+add x 15 => x = input2 +29
+eql x w 
+eql x 0 => x = 1
+mul y 0
+add y 25
+mul y x
+add y 1 => y = 26
+mul z y => z = 26 x ( 26(input1 + 6) + input2 + 14 )
+mul y 0
+add y w
+add y 14 => y = 14 + input3
+mul y x
+add z y z = 26 x ( 26(input1 + 6) + input2 + 14 ) + 14 + input3
+inp w --------------------------------------------- 4
+mul x 0
+add x z
+mod x 26 => x =   14 + input3
+div z 26 => z = ( 26(input1 + 6) + input2 + 14 ) 
+add x - => x = 14 + input3 - 8 = > input3 + 6
+eql x w =>  input3 + 6 = input4 !
+highest ====> input3 = 3 input4 = 9
+lowest  ====> input3 = 1 input4 = 7
+
+eql x 0
+mul y 0
+add y 25
+mul y x => 0
+add y 1 => y = 1
+mul z y => z = z
+mul y 0 
+add y w
+add y 10 => y = input4 + 10
+mul y x => y =0 
+add z y => z = 26(input1 + 6) + input2 + 14 ) 
+inp w --------------------------------------------- 5
+mul x 0
+add x z => x = z
+mod x 26 => x = input2 + 14
+div z 1
+add x 13 => x = input + 27
+eql x w => x =0
+eql x 0 => x = 1 
+mul y 0
+add y 25
+mul y x
+add y 1 => y = 26
+mul z y => z = 26(26(input1 + 6) + input2 + 14 ))
+mul y 0 
+add y w 
+add y 9 => y = input5 + 9
+mul y x => same
+add z y => z = 26(26(input1 + 6) + input2 + 14 )) + input5 + 9
+inp w --------------------------------------------- 6
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 15
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y => z = 26(26(26(input1 + 6) + input2 + 14 )) + input5 + 9)
+mul y 0
+add y w
+add y 12 => y = input6 + 12 
+mul y x
+add z y  => z = 26(26(26(input1 + 6) + input2 + 14 )) + input5 + 9) + input6 + 12
+inp w --------------------------------------------- 7 
+mul x 0
+add x z
+mod x 26 => x = input6 + 12
+div z 26 => z = (26(26(input1 + 6) + input2 + 14 )) + input5 + 9)
+add x -11 => x = input6 + 1
+eql x w => input6 + 1 = input7
+highest   ===>  input6 = 8/ input7 = 9
+lowest    ===>  input6 = 1/ input7 = 2
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 8
+mul y x => = 0
+add z y => z = 26(26(input1 + 6) + input2 + 14 )) + input5 + 9
+inp w --------------------------------------------- 8
+mul x 0
+add x z
+mod x 26 => x =  input5 + 9
+div z 26 => z =  26(input1 + 6) + input2 + 14 )
+add x -4  => x = input5 + 5
+eql x w => input8 = input5 + 5
+highest =====> input5 = 4 /// input8 = 9
+lowest  =====> input5 = 1 /// input8 = 6
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 13
+mul y x
+add z y => z =   26(input1 + 6) + input2 + 14 )
+inp w --------------------------------------------- 9
+mul x 0
+add x z
+mod x 26 => x =  input2 + 14
+div z 26 => z = (input1 + 6)
+add x -15 => x = input2 - 1
+eql x w => input2 - 1 =  input  9 
+highest  ===> input2 =9 // input9 == 8 
+lowest  ===> input2 =2 // input9 == 1
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 12
+mul y x
+add z y => z = input1 + 6
+inp w --------------------------------------------- 10 
+mul x 0
+add x z
+mod x 26 => x = 0
+div z 1
+add x 14 => x = 14
+eql x w => 
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y => z = 26(input1 + 6)
+mul y 0
+add y w
+add y 6 => y = input10 + 6
+mul y x
+add z y => z =  26(input1 + 6) +   input10 + 6
+inp w --------------------------------------------- 11
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 14
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y => z = 26(  26(input1 + 6) +   input10 + 6 )
+mul y 0
+add y w
+add y 9 => y = input11 + 9
+mul y x
+add z y => z =   26(  26(input1 + 6) +   input10 + 6 ) + input11 + 9
+inp w --------------------------------------------- 12
+mul x 0
+add x z
+mod x 26 => x = input11 + 9
+div z 26 => z =   26(input1 + 6) +   input10 + 6 )
+add x -1 => x = input11 + 8
+eql x w => input11 + 8 = input 12 
+highest ======> input11 = 1 / input 12 = 9
+lowest ======> input11 = 1 / input 12 = 9
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 15
+mul y x
+add z y => z =  26(input1 + 6) +   input10 + 6 )
+inp w --------------------------------------------- 13
+mul x 0
+add x z 
+mod x 26 => x = input10 + 6
+div z 26 => z = input1 + 6
+add x -8 => x = input10 - 2
+eql x w => input10 -2 = input 13
+highest =====>  input10 = 9 /// input 13 = 7
+lowest  =====> input10 = 3 input13 = 1
+eql x 0
+mul y 0
+add y 25
+mul y x =>>> y = 0
+add y 1
+mul z y
+mul y 0
+add y w
+add y 4
+mul y x
+add z y => z = input1 + 6
+inp w --------------------------------------------- 14
+mul x 0
+add x z
+mod x 26 ===> input1 + 6
+div z 26 ====> 0
+add x -14 ===> input1 + 6 - 14 == input1 - 8
+eql x w ==> input1 -8 = input14 ===> input1 = 9 / input14 = 1
+eql x 0
+mul y 0
+add y 25
+mul y x 
+add y 1
+mul z y
+mul y 0
+add y w
+add y 10
+mul y x
+add z y
