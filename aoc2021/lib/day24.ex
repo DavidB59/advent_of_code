@@ -48,10 +48,8 @@ defmodule Day24 do
   # input1 -8 = input14
 
   # code only serve to verify solution.
+
   @map %{"x" => 0, "y" => 0, "z" => 0, "w" => 0}
-  def parse(input) do
-    input
-  end
 
   def solve_part_one() do
     instructions = file()
@@ -67,66 +65,61 @@ defmodule Day24 do
     run_program(@map, instructions, input_list)
   end
 
-  def run_program(map, [head | rest], input_list) do
-    if String.starts_with?(head, "inp") do
-      [input | rest_input] = input_list
+  def run_program(map, ["inp " <> a | rest], [input | rest_input]) do
+    map
+    |> apply_instruction(a, input)
+    |> run_program(rest, rest_input)
+  end
 
-      map
-      |> apply_instruction(head, input)
-      |> run_program(rest, rest_input)
-    else
-      map
-      |> apply_instruction(head)
-      |> run_program(rest, input_list)
-    end
+  def run_program(map, [head | rest], input_list) do
+    map
+    |> apply_instruction(head)
+    |> run_program(rest, input_list)
   end
 
   def run_program(map, _, _input), do: map
 
-  def apply_instruction(map, "inp " <> a, input) do
+  def apply_instruction(map, a, input) do
     Map.put(map, a, input)
   end
 
-  @spec apply_instruction(map, <<_::32, _::_*8>>) :: map
   def apply_instruction(map, "add " <> a_space_b) do
     [a, b] = get_a_b(a_space_b)
     b = determine_b(b, map)
-    val_a = Map.get(map, a)
-    new_val_a = (val_a + b) |> trunc()
-    %{map | a => new_val_a}
+
+    Map.update!(map, a, &(&1 + b))
   end
 
   def apply_instruction(map, "mul " <> a_space_b) do
     [a, b] = get_a_b(a_space_b)
     b = determine_b(b, map)
-    val_a = Map.get(map, a)
-    new_val_a = (val_a * b) |> trunc()
-    %{map | a => new_val_a}
+
+    Map.update!(map, a, &(&1 * b))
   end
 
   def apply_instruction(map, "div " <> a_space_b) do
     [a, b] = get_a_b(a_space_b)
     b = determine_b(b, map)
-    val_a = Map.get(map, a)
-    new_val_a = (val_a / b) |> trunc()
-    %{map | a => new_val_a}
+
+    Map.update!(map, a, &trunc(&1 / b))
   end
 
   def apply_instruction(map, "mod " <> a_space_b) do
     [a, b] = get_a_b(a_space_b)
     b = determine_b(b, map)
-    val_a = Map.get(map, a)
-    new_val_a = rem(val_a, b)
-    %{map | a => new_val_a}
+
+    Map.update!(map, a, &rem(&1, b))
   end
 
   def apply_instruction(map, "eql " <> a_space_b) do
     [a, b] = get_a_b(a_space_b)
-    val_b = determine_b(b, map)
-    val_a = Map.get(map, a)
-    new_val_a = if val_a == val_b, do: 1, else: 0
-    %{map | a => new_val_a}
+    b = determine_b(b, map)
+
+    Map.update!(map, a, &eql(&1, b))
   end
+
+  def eql(a, a), do: 1
+  def eql(_, _), do: 0
 
   def get_a_b(a_space_b), do: String.split(a_space_b, " ")
   def determine_b(b, map), do: if(b in @variable, do: Map.get(map, b), else: String.to_integer(b))
