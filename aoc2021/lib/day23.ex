@@ -1,8 +1,6 @@
 defmodule Day23 do
-  def file, do: Parser.read_file("day23")
-  def test, do: Parser.read_file("test")
-
   @cannot_move :cannot_move
+  @letters ["A", "B", "C", "D"]
   @map %{
     1 => nil,
     2 => nil,
@@ -18,7 +16,8 @@ defmodule Day23 do
     {7, "up"} => "A",
     {7, "down"} => "D",
     {9, "up"} => "D",
-    {9, "down"} => "C"
+    {9, "down"} => "C",
+    cost: 0
   }
 
   @all_placed %{
@@ -38,6 +37,52 @@ defmodule Day23 do
   def cave_pos("B"), do: 5
   def cave_pos("C"), do: 7
   def cave_pos("D"), do: 9
+
+  def letter_cost("A"), do: 1
+  def letter_cost("B"), do: 10
+  def letter_cost("C"), do: 100
+  def letter_cost("D"), do: 1000
+
+  def update_cost(current_cost, letter, pos, target) do
+    {pos, target}
+
+    space_moved =
+      if is_integer(pos) do
+        {index, height} = target
+
+        cost_down =
+          case height do
+            "down" -> 2
+            "up" -> 1
+          end
+
+        abs(index - pos) + cost_down
+      else
+        {index, height} = pos
+
+        cost_up =
+          case height do
+            "down" -> 2
+            "up" -> 1
+          end
+
+        if is_integer(target) do
+          abs(index - target) + cost_up
+        else
+          {index2, height2} = target
+
+          cost_down =
+            case height2 do
+              "down" -> 2
+              "up" -> 1
+            end
+
+          abs(index - index2) + cost_up + cost_down
+        end
+      end
+
+    current_cost + letter_cost(letter) * space_moved
+  end
 
   def correctly_placed?(pos, pos, letter, map) do
     letter == Map.get(map, {pos, "down"})
@@ -72,9 +117,18 @@ defmodule Day23 do
         possible_move
       end
 
-    possible_move
-    |> Enum.filter(&Enum.member?(@valid_position, &1))
-    |> Enum.map(fn move -> map |> Map.put(move, letter) |> Map.put(key, nil) end)
+    if possible_move == [] do
+      @cannot_move
+    else
+      possible_move
+      |> Enum.filter(&Enum.member?(@valid_position, &1))
+      |> Enum.map(fn move ->
+        map
+        |> Map.put(move, letter)
+        |> Map.put(key, nil)
+        |> Map.update!(:cost, &update_cost(&1, letter, key, move))
+      end)
+    end
   end
 
   # letter is already where it belongs
@@ -109,6 +163,8 @@ defmodule Day23 do
 
   # letter on hallway position, can only go to its own cave
   def list_possible_move({pos, letter}, map) do
+    # IO.puts("hallway shit")
+
     cave_pos = cave_pos(letter)
 
     path_to_cave =
@@ -121,11 +177,17 @@ defmodule Day23 do
     if Enum.all?(path_to_cave, &is_nil(Map.get(map, &1))) do
       cond do
         is_nil(Map.get(map, {cave_pos, "down"})) ->
-          map |> Map.put({cave_pos, "down"}, letter) |> Map.put(pos, nil)
+          map
+          |> Map.put({cave_pos, "down"}, letter)
+          |> Map.put(pos, nil)
+          |> Map.update!(:cost, &update_cost(&1, letter, pos, {cave_pos, "down"}))
 
         is_nil(Map.get(map, {cave_pos, "up"})) and
             Map.get(map, {cave_pos, "down"}) == letter ->
-          map |> Map.put({cave_pos, "up"}, letter) |> Map.put(pos, nil)
+          map
+          |> Map.put({cave_pos, "up"}, letter)
+          |> Map.put(pos, nil)
+          |> Map.update!(:cost, &update_cost(&1, letter, pos, {cave_pos, "up"}))
 
         true ->
           @cannot_move
@@ -158,25 +220,23 @@ defmodule Day23 do
   end
 
   def solve_part_one() do
-    do_all(@map)
+    @map |> do_all() |> List.flatten() |> Enum.min()
   end
 
-  def do_all(map, old_map \\ %{})
-  def do_all(@all_placed, _), do: true |> IO.inspect(label: "here")
+  def do_all(@all_placed = map), do: map.cost
 
-  def do_all(map, map), do: @cannot_move
-
-  def do_all(map, _old_map) do
+  def do_all(map) do
     map
-    |> IO.inspect()
-    |> Enum.map(fn key -> list_possible_move(key, map) end)
+    |> Enum.map(fn
+      {key, value} when value in @letters ->
+        list_possible_move({key, value}, map)
+
+      _ ->
+        @cannot_move
+    end)
     |> List.flatten()
     |> Enum.reject(&(&1 == @cannot_move))
-    |> Enum.map(&do_all(&1, map))
-  end
-
-  def filter_possible_move(map) do
-    Enum.reject(map, &(list_possible_move(&1, map) == @cannot_move))
+    |> Enum.map(&do_all(&1))
   end
 end
 
