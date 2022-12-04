@@ -52,4 +52,8 @@ defmodule Utils do
   defp do_mean([x | xs], t, l) do
     do_mean(xs, t + x, l + 1)
   end
+
+  def character_to_integer(char) do
+    char |> String.to_charlist() |> hd
+  end
 end
