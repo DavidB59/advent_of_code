@@ -21,6 +21,7 @@ defmodule Aoc2022.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:dotenv_parser, "~> 2.0"},
       {:httpoison, "~> 1.8"},
       {:libgraph, "~> 0.7"}
       # {:dep_from_hexpm, "~> 0.3.0"},
