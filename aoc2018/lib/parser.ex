@@ -1,7 +1,7 @@
 defmodule Parser do
   def read_file(day) when is_integer(day) do
     day
-    |> AdventOfCode.Input.get!(2022)
+    |> AdventOfCode.Input.get!(2018)
     |> String.split("\n")
     |> Enum.drop(-1)
   end

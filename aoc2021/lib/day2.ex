@@ -1,7 +1,5 @@
 defmodule Day2 do
-  def file do
-    Parser.read_file("day2")
-  end
+  def file, do: Parser.read_file("day2")
 
   def parse(file) do
     Enum.map(file, fn string ->

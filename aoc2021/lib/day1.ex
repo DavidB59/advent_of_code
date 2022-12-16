@@ -1,6 +1,6 @@
 defmodule Day1 do
   def file do
-    Parser.read_file("day1") |> Enum.map(&String.to_integer/1)
+    "day1" |> Parser.read_file() |> Enum.map(&String.to_integer/1)
   end
 
   def test do

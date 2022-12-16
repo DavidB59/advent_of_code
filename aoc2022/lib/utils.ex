@@ -14,11 +14,9 @@ defmodule Utils do
     end)
   end
 
-  def exchange_key_value(map) do
-    map
-    |> Enum.map(fn {k, v} -> {v, k} end)
-    |> Map.new()
-  end
+  def to_list_of_list(file), do: Enum.map(file, &String.graphemes/1)
+
+  def exchange_key_value(map), do: Map.new(map, fn {k, v} -> {v, k} end)
 
   def median([]), do: nil
 
@@ -56,4 +54,42 @@ defmodule Utils do
   def character_to_integer(char) do
     char |> String.to_charlist() |> hd
   end
+
+  def string_pattern_match(string, string_size) do
+    <<match::bytes-size(string_size)>> <> rest = string
+    {match, rest}
+  end
+
+  def extract_number_from_string(string) do
+    String.replace(string, ~r/[^\d]/, "")
+  end
+end
+
+# prime decomposition
+defmodule Prime do
+  @spec decomposition(any) :: list
+  def decomposition(n), do: decomposition(n, 2, [])
+
+  defp decomposition(n, k, acc) when n < k * k, do: Enum.reverse(acc, [n])
+  defp decomposition(n, k, acc) when rem(n, k) == 0, do: decomposition(div(n, k), k, [k | acc])
+  defp decomposition(n, k, acc), do: decomposition(n, k + 1, acc)
+end
+
+prime =
+  Stream.iterate(2, &(&1 + 1))
+  |> Stream.filter(fn n -> length(Prime.decomposition(n)) == 1 end)
+  |> Enum.take(17)
+
+mersenne = Enum.map(prime, fn n -> {n, round(:math.pow(2, n)) - 1} end)
+
+Enum.each(mersenne, fn {n, m} ->
+  :io.format("~3s :~20w = ~s~n", ["M#{n}", m, Prime.decomposition(m) |> Enum.join(" x ")])
+end)
+
+# ppcm
+defmodule RC do
+  def gcd(a, 0), do: abs(a)
+  def gcd(a, b), do: gcd(b, rem(a, b))
+
+  def lcm(a, b), do: div(abs(a * b), gcd(a, b))
 end

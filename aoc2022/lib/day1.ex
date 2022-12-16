@@ -1,6 +1,7 @@
 defmodule Day1 do
   def file do
-    "day1" |> Parser.read_file()
+    # "day1" |> Parser.read_file()
+    Parser.read_file(1)
   end
 
   def test do
