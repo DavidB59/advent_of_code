@@ -16,7 +16,7 @@ defmodule Day9 do
     |> parse()
     |> Enum.map(fn list ->
       list
-      |> repeat_until_zeroes([list])
+      |> build_history([list])
       |> Enum.map(&List.last/1)
       |> Enum.reduce(&(&1 + &2))
     end)

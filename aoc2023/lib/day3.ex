@@ -27,7 +27,6 @@ defmodule Day3 do
         if coords == [] do
           {acc2, updated_map}
         else
-          # new_acc2 = Map.put(acc2, number, coords)
           new_acc2 = [{number, coords} | acc2]
           {new_acc2, new_map}
         end
@@ -48,15 +47,10 @@ defmodule Day3 do
   end
 
   def solve(input) do
-    # map = parse(input)
     {numbers, map_without_numbers} =
       input
       |> parse()
       |> find_numbers()
-
-    # |> elem(0)
-
-    #   numbers |> Map.keys() |> IO.inspect()
 
     clean_map =
       map_without_numbers
@@ -64,7 +58,6 @@ defmodule Day3 do
         {key, "."}, acc -> Map.put(acc, key, nil)
         {key, val}, acc -> Map.put(acc, key, val)
       end)
-      |> IO.inspect()
 
     numbers
     |> Enum.filter(fn {_number, coordinates} ->
@@ -75,7 +68,6 @@ defmodule Day3 do
   end
 
   def solve_two(input) do
-    # map = parse(input)
     {numbers, map_without_numbers} =
       input
       |> parse()
@@ -87,48 +79,33 @@ defmodule Day3 do
         new_map = coords |> Map.new(fn coord -> {coord, {index, number}} end) |> Map.merge(acc)
         {new_map, index + 1}
       end)
-      |> IO.inspect()
 
-    gear_coords =
-      map_without_numbers
-      |> Enum.reduce([], fn
-        {key, "*"}, acc -> [key | acc]
-        _, acc -> acc
-      end)
-
-    gear_coords
-    |> Enum.map(fn coord ->
-      # IO.inspect(coord, label: "Coord")
-      neighbour_count(coord, next_gen_number_map)
-    end)
-    # |> IO.inspect()
+    map_without_numbers
+    |> Enum.reduce([], &keep_only_gear_coordinates/2)
+    |> Enum.map(&neighbour_count(&1, next_gen_number_map))
     |> Enum.sum()
   end
 
+  defp keep_only_gear_coordinates({key, "*"}, acc), do: [key | acc]
+  defp keep_only_gear_coordinates(_, acc), do: acc
+
   def neighbour_count({x, y}, map) do
-    result =
-      [
-        Map.get(map, {x + 1, y}),
-        Map.get(map, {x + 1, y - 1}),
-        Map.get(map, {x + 1, y + 1}),
-        Map.get(map, {x, y - 1}),
-        Map.get(map, {x, y + 1}),
-        Map.get(map, {x - 1, y}),
-        Map.get(map, {x - 1, y - 1}),
-        Map.get(map, {x - 1, y + 1})
-      ]
-      |> Enum.reject(&is_nil/1)
-      |> IO.inspect()
-      |> Map.new()
-      |> Map.values()
-
-    case result do
-      [a, b] ->
-        String.to_integer(a) * String.to_integer(b)
-
-      here ->
-        IO.inspect(here, label: "here")
-        0
+    [
+      Map.get(map, {x + 1, y}),
+      Map.get(map, {x + 1, y - 1}),
+      Map.get(map, {x + 1, y + 1}),
+      Map.get(map, {x, y - 1}),
+      Map.get(map, {x, y + 1}),
+      Map.get(map, {x - 1, y}),
+      Map.get(map, {x - 1, y - 1}),
+      Map.get(map, {x - 1, y + 1})
+    ]
+    |> Enum.reject(&is_nil/1)
+    |> Map.new()
+    |> Map.values()
+    |> case do
+      [a, b] -> String.to_integer(a) * String.to_integer(b)
+      _ -> 0
     end
   end
 
@@ -143,10 +120,6 @@ defmodule Day3 do
         Map.get(map, {x - 1, y - 1}) ||
         Map.get(map, {x - 1, y + 1})
 
-    if result do
-      true
-    else
-      false
-    end
+    if result, do: true, else: false
   end
 end

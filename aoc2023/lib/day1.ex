@@ -11,19 +11,11 @@ defmodule Day1 do
     regex = ~r/1|2|3|4|5|6|7|8|9/
 
     file()
-    |> Enum.map(&find_number(&1, regex))
+    |> Enum.map(&find_numbers(&1, regex))
     |> Enum.sum()
   end
 
-  def solve_two do
-    regex = ~r/one|two|three|four|five|six|seven|eight|nine|1|2|3|4|5|6|7|8|9/
-
-    file()
-    |> Enum.map(&find_number_2(&1, regex))
-    |> Enum.sum()
-  end
-
-  def find_number(string, regex) do
+  def find_numbers(string, regex) do
     regex
     |> Regex.scan(string)
     |> List.flatten()
@@ -32,18 +24,22 @@ defmodule Day1 do
     |> String.to_integer()
   end
 
-  def find_number_2(string, regex) do
+  def solve_two do
+    regex = ~r/one|two|three|four|five|six|seven|eight|nine|1|2|3|4|5|6|7|8|9/
     reverse_regex = ~r/9|8|7|6|5|4|3|2|1|enin|thgie|neves|xis|evif|ruof|eerht|owt|eno/
-    n1 = Regex.scan(regex, string) |> List.flatten() |> List.first() |> format()
 
-    n2 =
-      Regex.scan(reverse_regex, String.reverse(string))
-      |> List.flatten()
-      |> List.first()
-      |> format()
-
-    (n1 <> n2) |> String.to_integer()
+    file()
+    |> Enum.map(&find_numbers_v2(&1, regex, reverse_regex))
+    |> Enum.sum()
   end
+
+  def find_numbers_v2(string, regex, reverse_regex) do
+    n1 = find_number(string, regex)
+    n2 = find_number(String.reverse(string), reverse_regex)
+    String.to_integer(n1 <> n2)
+  end
+
+  defp find_number(string, regex), do: regex |> Regex.run(string) |> List.first() |> format()
 
   def combine_first_last([a]), do: a <> a
   def combine_first_last([a, b]), do: a <> b
