@@ -1,4 +1,17 @@
 defmodule Day3 do
+  def neighbours_coordinates({x, y}) do
+    [
+      {x + 1, y},
+      {x + 1, y - 1},
+      {x + 1, y + 1},
+      {x, y - 1},
+      {x, y + 1},
+      {x - 1, y},
+      {x - 1, y - 1},
+      {x - 1, y + 1}
+    ]
+  end
+
   def file do
     Parser.read_file(3)
   end
@@ -11,6 +24,7 @@ defmodule Day3 do
     input
     |> Utils.to_list_of_list()
     |> Utils.nested_list_to_xy_map()
+    |> find_numbers()
   end
 
   def nbs do
@@ -47,31 +61,32 @@ defmodule Day3 do
   end
 
   def solve(input) do
-    {numbers, map_without_numbers} =
-      input
-      |> parse()
-      |> find_numbers()
+    {numbers, map_without_numbers} = parse(input)
 
-    clean_map =
-      map_without_numbers
-      |> Enum.reduce(%{}, fn
-        {key, "."}, acc -> Map.put(acc, key, nil)
-        {key, val}, acc -> Map.put(acc, key, val)
-      end)
+    clean_map = Enum.reduce(map_without_numbers, %{}, &remove_dot/2)
 
     numbers
-    |> Enum.filter(fn {_number, coordinates} ->
-      Enum.any?(coordinates, &is_neighbour_symbol?(&1, clean_map))
-    end)
+    |> Enum.filter(&is_adjacent_to_symbol(&1, clean_map))
     |> Enum.map(fn {a, _b} -> String.to_integer(a) end)
     |> Enum.sum()
   end
 
+  defp remove_dot({_key, "."}, acc), do: acc
+  defp remove_dot({key, val}, acc), do: Map.put(acc, key, val)
+
+  defp is_adjacent_to_symbol({_, coordinates}, map) do
+    Enum.any?(coordinates, &is_neighbour_symbol?(&1, map))
+  end
+
+  defp is_neighbour_symbol?(coordinate, map) do
+    coordinate
+    |> neighbours_coordinates()
+    |> Enum.find(&Map.get(map, &1))
+    |> then(&(!is_nil(&1)))
+  end
+
   def solve_two(input) do
-    {numbers, map_without_numbers} =
-      input
-      |> parse()
-      |> find_numbers()
+    {numbers, map_without_numbers} = parse(input)
 
     {next_gen_number_map, _} =
       numbers
@@ -82,24 +97,17 @@ defmodule Day3 do
 
     map_without_numbers
     |> Enum.reduce([], &keep_only_gear_coordinates/2)
-    |> Enum.map(&neighbour_count(&1, next_gen_number_map))
+    |> Enum.map(&gear_ratio(&1, next_gen_number_map))
     |> Enum.sum()
   end
 
   defp keep_only_gear_coordinates({key, "*"}, acc), do: [key | acc]
   defp keep_only_gear_coordinates(_, acc), do: acc
 
-  def neighbour_count({x, y}, map) do
-    [
-      Map.get(map, {x + 1, y}),
-      Map.get(map, {x + 1, y - 1}),
-      Map.get(map, {x + 1, y + 1}),
-      Map.get(map, {x, y - 1}),
-      Map.get(map, {x, y + 1}),
-      Map.get(map, {x - 1, y}),
-      Map.get(map, {x - 1, y - 1}),
-      Map.get(map, {x - 1, y + 1})
-    ]
+  def gear_ratio(coordinate, map) do
+    coordinate
+    |> neighbours_coordinates()
+    |> Enum.map(&Map.get(map, &1))
     |> Enum.reject(&is_nil/1)
     |> Map.new()
     |> Map.values()
@@ -109,17 +117,6 @@ defmodule Day3 do
     end
   end
 
-  def is_neighbour_symbol?({x, y}, map) do
-    result =
-      Map.get(map, {x + 1, y}) ||
-        Map.get(map, {x + 1, y - 1}) ||
-        Map.get(map, {x + 1, y + 1}) ||
-        Map.get(map, {x, y - 1}) ||
-        Map.get(map, {x, y + 1}) ||
-        Map.get(map, {x - 1, y}) ||
-        Map.get(map, {x - 1, y - 1}) ||
-        Map.get(map, {x - 1, y + 1})
 
-    if result, do: true, else: false
-  end
+
 end

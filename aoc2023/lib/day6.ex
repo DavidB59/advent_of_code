@@ -44,14 +44,16 @@ defmodule Day6 do
   end
 
   def solve_two(input) do
-   [time, distance ] =  input
-    |> Enum.map(fn string ->
-      string
-      |> String.split()
-      |> List.delete_at(0)
-      |> Enum.join()
-      |> String.to_integer()
-    end)
-     calculate(time, distance)
+    [time, distance] =
+      input
+      |> Enum.map(fn string ->
+        string
+        |> String.split()
+        |> List.delete_at(0)
+        |> Enum.join()
+        |> String.to_integer()
+      end)
+
+    calculate(time, distance)
   end
 end
