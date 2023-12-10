@@ -16,6 +16,28 @@ defmodule Utils do
 
   def to_list_of_list(file), do: Enum.map(file, &String.graphemes/1)
 
+  def neighbours_coordinates({x, y}) do
+    [
+      {x + 1, y},
+      {x + 1, y - 1},
+      {x + 1, y + 1},
+      {x, y - 1},
+      {x, y + 1},
+      {x - 1, y},
+      {x - 1, y - 1},
+      {x - 1, y + 1}
+    ]
+  end
+
+  def neighbours_no_diagonale({x, y}) do
+    [
+      {x + 1, y},
+      {x, y - 1},
+      {x, y + 1},
+      {x - 1, y}
+    ]
+  end
+
   def exchange_key_value(map), do: Map.new(map, fn {k, v} -> {v, k} end)
 
   def median([]), do: nil
@@ -63,6 +85,28 @@ defmodule Utils do
   def extract_number_from_string(string) do
     String.replace(string, ~r/[^\d]/, "")
   end
+
+  @doc """
+  Trapezoid formula
+  takes a list of coordinates as {x,y}, return the area
+  """
+  def polygon_area([head | _rest] = list) do
+    list
+    |> polygon_area(head)
+    |> abs()
+    |> Kernel./(2)
+  end
+
+  def polygon_area(sum \\ 0, list_positions, head)
+
+  def polygon_area(sum, [pos1], pos2), do: sum + product(pos1, pos2)
+
+  def polygon_area(sum, [pos1, pos2 | rest], head) do
+    polygon_area(sum + product(pos1, pos2), [pos2 | rest], head)
+  end
+
+  # TODO rename function
+  defp product({x1, y1}, {x2, y2}), do: (y1 + y2) * (x1 - x2)
 end
 
 # prime decomposition
