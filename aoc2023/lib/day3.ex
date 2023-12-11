@@ -1,17 +1,4 @@
 defmodule Day3 do
-  def neighbours_coordinates({x, y}) do
-    [
-      {x + 1, y},
-      {x + 1, y - 1},
-      {x + 1, y + 1},
-      {x, y - 1},
-      {x, y + 1},
-      {x - 1, y},
-      {x - 1, y - 1},
-      {x - 1, y + 1}
-    ]
-  end
-
   def file do
     Parser.read_file(3)
   end
@@ -80,7 +67,7 @@ defmodule Day3 do
 
   defp is_neighbour_symbol?(coordinate, map) do
     coordinate
-    |> neighbours_coordinates()
+    |> Utils.neighbours_coordinates()
     |> Enum.find(&Map.get(map, &1))
     |> then(&(!is_nil(&1)))
   end
@@ -88,25 +75,32 @@ defmodule Day3 do
   def solve_two(input) do
     {numbers, map_without_numbers} = parse(input)
 
-    {next_gen_number_map, _} =
+    # make a map with key coordinates {x,y} and value {index, number}
+    # put the index to make sure later to not mistake identical numbers on different coordinates
+    coord_number_map =
       numbers
       |> Enum.reduce({%{}, 0}, fn {number, coords}, {acc, index} ->
-        new_map = coords |> Map.new(fn coord -> {coord, {index, number}} end) |> Map.merge(acc)
+        new_map =
+          coords
+          |> Map.new(fn coord -> {coord, {index, number}} end)
+          |> Map.merge(acc)
+
         {new_map, index + 1}
       end)
+      |> elem(0)
 
     map_without_numbers
     |> Enum.reduce([], &keep_only_gear_coordinates/2)
-    |> Enum.map(&gear_ratio(&1, next_gen_number_map))
+    |> Enum.map(&find_gear_ratio(&1, coord_number_map))
     |> Enum.sum()
   end
 
   defp keep_only_gear_coordinates({key, "*"}, acc), do: [key | acc]
   defp keep_only_gear_coordinates(_, acc), do: acc
 
-  def gear_ratio(coordinate, map) do
+  def find_gear_ratio(coordinate, map) do
     coordinate
-    |> neighbours_coordinates()
+    |> Utils.neighbours_coordinates()
     |> Enum.map(&Map.get(map, &1))
     |> Enum.reject(&is_nil/1)
     |> Map.new()
@@ -116,7 +110,4 @@ defmodule Day3 do
       _ -> 0
     end
   end
-
-
-
 end

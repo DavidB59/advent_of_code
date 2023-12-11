@@ -86,7 +86,7 @@ defmodule Day10_addingspace do
     Enum.filter(coordinates_without_loop_pipes, fn {x, y} ->
       Graph.get_shortest_path(updated_graph, {x / 1, y / 1}, {0.0, 0.0}) |> is_nil()
     end)
-    |> IO.inspect()
+    |> Enum.count()
   end
 
   def add_both_edges_if_exists(graph, {x1, y1}, {x2, y2}, _map) do

@@ -8,57 +8,37 @@ defmodule Day11 do
   end
 
   def parse(input, enlarge_by) do
-    index_duplicate_line = input |> add_extra_line() |> Enum.map(&elem(&1, 1)) |> IO.inspect()
-    index_duplicate_colum = input |> add_extra_column() |> Enum.map(&elem(&1, 1)) |> IO.inspect()
-
-    input
-    |> Utils.to_list_of_list()
-    |> Utils.nested_list_to_xy_map()
-    |> Enum.filter(fn {_coords, value} -> value == "#" end)
-    |> Stream.with_index()
-    |> Map.new(fn {{coord, _}, index} -> {index, coord} end)
-    |> Enum.reduce(%{}, fn {index, {x, y}}, acc ->
-      multiplicator = Enum.filter(index_duplicate_colum, &(&1 < x)) |> Enum.count()
-      x = x + multiplicator * enlarge_by - multiplicator
-      multiplicator = Enum.filter(index_duplicate_line, &(&1 < y)) |> Enum.count()
-      y = y + multiplicator * enlarge_by - multiplicator
-      Map.put(acc, index, {x, y})
-    end)
-  end
-
-  def add_extra_column(list) do
-    nb_of_columns = list |> List.first() |> String.length() |> Kernel.-(1)
-
-    line_map =
-      list
+    galaxy_map =
+      input
+      |> Utils.to_list_of_list()
+      |> Utils.nested_list_to_xy_map()
+      |> Enum.filter(fn {_coords, value} -> value == "#" end)
       |> Stream.with_index()
-      |> Map.new(fn {a, b} -> {b, a} end)
+      |> Map.new(fn {{coord, _}, index} -> {index, coord} end)
 
-    nb_of_lines = line_map |> Map.keys() |> Enum.max()
+    {x_galaxy_list, y_galaxy_list} =
+      galaxy_map
+      |> Map.values()
+      |> Enum.reduce({[], []}, fn {x, y}, {list_x, list_y} -> {[x | list_x], [y | list_y]} end)
 
-    Enum.reduce(0..nb_of_columns, {line_map, %{}}, fn column_nb, {line_map, column_map} ->
-      Enum.reduce(0..nb_of_lines, {line_map, column_map}, fn line_nb, {line_map, column_map} ->
-        string = Map.get(line_map, line_nb)
-        {first, rest} = String.split_at(string, 1)
+    index_duplicate_line =
+      0..Enum.max(y_galaxy_list) |> Enum.reject(&Enum.member?(y_galaxy_list, &1))
 
-        current_value = Map.get(column_map, column_nb, "")
-        new_value = first <> current_value
-        c_map = Map.put(column_map, column_nb, new_value)
-        l_map = line_map |> Map.put(line_nb, rest)
-        {l_map, c_map}
-      end)
+    index_duplicate_colum =
+      0..Enum.max(x_galaxy_list) |> Enum.reject(&Enum.member?(x_galaxy_list, &1))
+
+    Map.new(galaxy_map, fn {index, {x, y}} ->
+      x = expand_universe(x, index_duplicate_colum, enlarge_by)
+      y = expand_universe(y, index_duplicate_line, enlarge_by)
+
+      {index, {x, y}}
     end)
-    |> elem(1)
-    |> Enum.map(& &1)
-    |> Enum.sort_by(&elem(&1, 0))
-    |> Enum.map(&elem(&1, 1))
-    |> add_extra_line()
   end
 
-  def add_extra_line(input) do
-    input
-    |> Stream.with_index()
-    |> Enum.reject(&(&1 |> elem(0) |> String.contains?("#")))
+
+  def expand_universe(coordinate, list_duplicate_coordinate, enlarge_by) do
+    multiplicator = list_duplicate_coordinate |> Enum.filter(&(&1 < coordinate)) |> Enum.count()
+    coordinate + multiplicator * (enlarge_by - 1)
   end
 
   def solve(input) do
@@ -80,51 +60,26 @@ defmodule Day11 do
   def find_all_path(galaxies_map) do
     limit = galaxies_map |> Map.keys() |> Enum.max()
 
-    0..limit
-    |> Enum.reduce(%{}, fn source, acc ->
+    Enum.reduce(0..limit, %{}, fn source, acc ->
       Enum.reduce(0..limit, acc, fn
-        ^source, acc2 ->
-          acc2
+        ^source, acc ->
+          acc
 
-        target, acc2 ->
-          if Map.get(acc2, {source, target}) || Map.get(acc2, {target, source}) do
-            acc2
+        target, acc ->
+          if Map.get(acc, {source, target}) || Map.get(acc, {target, source}) do
+            acc
           else
             source_coordinate = Map.get(galaxies_map, source)
             target_coordinate = Map.get(galaxies_map, target)
 
-            path = distance_between_two_points(source_coordinate, target_coordinate, 0)
-            Map.put(acc2, {source, target}, path)
+            path = distance_between_two_points(source_coordinate, target_coordinate)
+            Map.put(acc, {source, target}, path)
           end
       end)
     end)
   end
 
-  def distance_between_two_points({x1, y1}, {x1, y1}, current), do: current
-
-  def distance_between_two_points({x1, y1}, {x1, y2}, current) do
-    abs(y2 - y1) + current
-  end
-
-  def distance_between_two_points({x1, y1}, {x2, y1}, current) do
-    abs(x2 - x1) + current
-  end
-
-  def distance_between_two_points({x1, y1}, {x2, y2}, current) do
-    new_x =
-      if x1 > x2 do
-        x1 - 1
-      else
-        x1 + 1
-      end
-
-    new_y =
-      if y1 > y2 do
-        y1 - 1
-      else
-        y1 + 1
-      end
-
-    distance_between_two_points({new_x, new_y}, {x2, y2}, current + 2)
+  def distance_between_two_points({x1, y1}, {x2, y2}) do
+    abs(x1 - x2) + abs(y1 - y2)
   end
 end

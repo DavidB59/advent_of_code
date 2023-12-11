@@ -97,11 +97,11 @@ defmodule Utils do
     |> Kernel./(2)
   end
 
-  def polygon_area(sum \\ 0, list_positions, head)
+  defp polygon_area(sum \\ 0, list_positions, head)
 
-  def polygon_area(sum, [pos1], pos2), do: sum + product(pos1, pos2)
+  defp polygon_area(sum, [pos1], pos2), do: sum + product(pos1, pos2)
 
-  def polygon_area(sum, [pos1, pos2 | rest], head) do
+  defp polygon_area(sum, [pos1, pos2 | rest], head) do
     polygon_area(sum + product(pos1, pos2), [pos2 | rest], head)
   end
 
