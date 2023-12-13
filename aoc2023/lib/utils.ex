@@ -137,3 +137,12 @@ defmodule RC do
 
   def lcm(a, b), do: div(abs(a * b), gcd(a, b))
 end
+
+defmodule Factorial do
+  # Define the function
+  def fact(n) do
+    # If the number is zero or 1, return 1. Else, multiply the number by the result of the
+    # next recursive call.
+    ((n == 1 or n == 0) && 1) || n * Factorial.fact(n - 1)
+  end
+end

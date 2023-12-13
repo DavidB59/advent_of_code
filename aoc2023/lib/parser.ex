@@ -14,6 +14,12 @@ defmodule Parser do
       error -> error
     end
   end
+
+  def raw_file(day) do
+    path = __DIR__ <> "/input/#{day}"
+
+    File.read!(path)
+  end
 end
 
 # defmodule Parser do
