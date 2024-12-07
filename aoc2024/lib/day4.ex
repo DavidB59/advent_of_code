@@ -11,10 +11,8 @@ defmodule Day4 do
     map = parse(input)
 
     map
-    |> Enum.reduce(0, fn element, counter ->
-      number = number_of_x_mas(element, map)
-      number + counter
-    end)
+    |> Enum.map(&number_of_x_mas(&1, map))
+    |> Enum.sum()
   end
 
   def parse(input) do
@@ -50,10 +48,8 @@ defmodule Day4 do
     map = parse(input)
 
     map
-    |> Enum.reduce(0, fn element, counter ->
-      number = number_of_cross_mas(element, map)
-      number + counter
-    end)
+    |> Enum.map(&number_of_cross_mas(&1, map))
+    |> Enum.sum()
   end
 
   def number_of_cross_mas({{x, y}, "A"}, map) do

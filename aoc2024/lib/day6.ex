@@ -14,7 +14,7 @@ defmodule Day6 do
   def solve(input \\ file()) do
     map = input |> parse
     current_position = Enum.find(map, fn {_key, value} -> value == "^" end) |> elem(0)
-   counter = move_guard(current_position, map, {0, -1}, 0)
+    counter = move_guard(current_position, map, {0, -1}, 0)
 
     counter + 1
   end
@@ -46,8 +46,8 @@ defmodule Day6 do
       next_position = next_postion(current_position, direction)
 
       case Map.get(map, next_position) do
-        nil -> counter
-
+        nil ->
+          counter
 
         "#" ->
           :must_rotate
