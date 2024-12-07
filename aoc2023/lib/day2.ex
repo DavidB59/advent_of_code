@@ -10,8 +10,8 @@ defmodule Day2 do
   def parse(input) do
     input
     |> Enum.map(fn string ->
-      {_, rest} = String.split_at(string, 5)
-      [id, string_games] = String.split(rest, ":")
+      # {_, rest} = String.split_at(string, 5)
+      [_id, string_games] = String.split(string, ":")
 
       games =
         String.split(string_games, ";")
@@ -21,44 +21,37 @@ defmodule Day2 do
           |> Enum.map(fn a -> a |> String.trim() |> extract_number() end)
         end)
 
-      {String.to_integer(id), games}
+      games
     end)
-    |> Map.new()
+
+    # |> Map.new()
   end
 
-  def extract_number(<<match::bytes-size(1)>> <> " blue"), do: {String.to_integer(match), "blue"}
+  def extract_number(<<match::binary-1>> <> " blue"), do: {String.to_integer(match), "blue"}
+  def extract_number(<<match::binary-1>> <> " green"), do: {String.to_integer(match), "green"}
+  def extract_number(<<match::binary-1>> <> " red"), do: {String.to_integer(match), "red"}
+  def extract_number(<<match::binary-2>> <> " blue"), do: {String.to_integer(match), "blue"}
+  def extract_number(<<match::binary-2>> <> " green"), do: {String.to_integer(match), "green"}
+  def extract_number(<<match::binary-2>> <> " red"), do: {String.to_integer(match), "red"}
 
-  def extract_number(<<match::bytes-size(1)>> <> " green"),
-    do: {String.to_integer(match), "green"}
-
-  def extract_number(<<match::bytes-size(1)>> <> " red"), do: {String.to_integer(match), "red"}
-
-  def extract_number(<<match::bytes-size(2)>> <> " blue"), do: {String.to_integer(match), "blue"}
-
-  def extract_number(<<match::bytes-size(2)>> <> " green"),
-    do: {String.to_integer(match), "green"}
-
-  def extract_number(<<match::bytes-size(2)>> <> " red"), do: {String.to_integer(match), "red"}
-
-  def solve(input) do
+  def solve(input \\ file()) do
     input
     |> parse()
-    |> Enum.reject(fn {_id, games} ->
+    |> Enum.reject(fn games ->
+      IO.inspect(games, label: "game")
       Enum.any?(games, &impossible_game?(&1))
     end)
-    |> Enum.map(&elem(&1, 0))
+    # |> Enum.map(&elem(&1, 0))
     |> Enum.sum()
   end
 
-  def impossible_game?(list_cubes) do
-    Enum.any?(list_cubes, &max_cube_per_color/1)
-  end
+  def impossible_game?(list_cubes), do: Enum.any?(list_cubes, &max_cube_per_color/1)
 
   def max_cube_per_color({number, "red"}), do: number > 12
   def max_cube_per_color({number, "green"}), do: number > 13
   def max_cube_per_color({number, "blue"}), do: number > 14
 
-  def solve_two(input) do
+  def solve_two(input \\ file()) do
     input
     |> parse()
     |> Enum.map(fn {_id, games} -> find_minimum_cube(games) end)

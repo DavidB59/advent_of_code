@@ -19,6 +19,7 @@ defmodule AdventOfCode.Input do
   def get!(day, year) do
     cond do
       in_cache?(day, year) ->
+        IO.puts("from cache")
         from_cache!(day, year)
 
       allow_network?() ->
@@ -77,7 +78,7 @@ defmodule AdventOfCode.Input do
   defp config, do: Application.get_env(:advent_of_code, __MODULE__) || []
   defp allow_network?, do: Keyword.get(config(), :allow_network?, true)
 
-  defp headers,
+  def headers,
     do: [{'cookie', String.to_charlist("session=" <> cookie())}]
 
   defp cookie,

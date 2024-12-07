@@ -35,7 +35,6 @@ defmodule Day11 do
     end)
   end
 
-
   def expand_universe(coordinate, list_duplicate_coordinate, enlarge_by) do
     multiplicator = list_duplicate_coordinate |> Enum.filter(&(&1 < coordinate)) |> Enum.count()
     coordinate + multiplicator * (enlarge_by - 1)
