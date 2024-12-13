@@ -60,8 +60,7 @@ defmodule Day11 do
         |> Enum.map(&(&1 |> Enum.join() |> String.to_integer()))
 
       _ ->
-        stone
-        |> Kernel.*(2024)
+        stone * 2024
     end
   end
 

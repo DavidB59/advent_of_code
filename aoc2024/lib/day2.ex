@@ -9,9 +9,7 @@ defmodule Day2 do
 
   def solve() do
     file()
-    |> Enum.map(fn string ->
-      String.split(string) |> Enum.map(&String.to_integer/1)
-    end)
+    |> Enum.map(fn string -> string |> String.split() |> Enum.map(&String.to_integer/1) end)
     |> Enum.map(&check_one_line/1)
     |> Enum.reject(&(&1 == :unsafe))
     |> Enum.count()
@@ -19,9 +17,7 @@ defmodule Day2 do
 
   def solve_two() do
     file()
-    |> Enum.map(fn string ->
-      String.split(string) |> Enum.map(&String.to_integer/1)
-    end)
+    |> Enum.map(fn string -> string |> String.split() |> Enum.map(&String.to_integer/1) end)
     |> Enum.filter(&check_one_line_two/1)
     |> Enum.count()
   end
@@ -53,6 +49,12 @@ defmodule Day2 do
   def continue(:one, {next_number, direction}), do: {:cont, {next_number, direction}}
   def continue(direction, {next_number, direction}), do: {:cont, {next_number, direction}}
   def continue(_, _), do: {:halt, :unsafe}
+
+  # def valid?(0, _), do: false
+  # def valid?(diff, _direction) when abs(diff) > 3, do: false
+  # def valid?(diff, :increase) when diff > 0, do: false
+  # def valid?(diff, :decrease) when diff < 0, do: false
+  # def valid?(_, _), do: true
 
   def check_one_line_two(line) do
     case check_one_line(line) do
