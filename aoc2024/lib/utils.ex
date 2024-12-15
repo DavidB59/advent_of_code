@@ -1,4 +1,13 @@
 defmodule Utils do
+  def plot(map) do
+    list =
+      Enum.reject(map, fn {_k, v} -> v == "." end)
+      |> Enum.map(&elem(&1, 0))
+      |> Enum.map(fn {x, y} -> {x, -y} end)
+
+    Gnuplot.plot([[:plot, "-", :title, "counter ", :with, :circle]], [list])
+  end
+
   def list_to_index_map(list) do
     list |> Stream.with_index() |> Enum.reduce(%{}, fn {v, k}, acc -> Map.put(acc, k, v) end)
   end
@@ -27,6 +36,15 @@ defmodule Utils do
       {x - 1, y - 1},
       {x - 1, y + 1}
     ]
+  end
+
+  def plot(map) do
+    list =
+      Enum.reject(map, fn {_k, v} -> v == "." end)
+      |> Enum.map(&elem(&1, 0))
+      |> Enum.map(fn {x, y} -> {x, -y} end)
+
+    Gnuplot.plot([[:plot, "-", :title, "counter ", :with, :circle]], [list])
   end
 
   def neighbours_no_diagonale({x, y}) do
