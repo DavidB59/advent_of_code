@@ -25,7 +25,9 @@ defmodule Aoc2024.MixProject do
       {:httpoison, "~> 1.8"},
       {:libgraph, "~> 0.7"},
       {:combination, "~> 0.0"},
-      {:levenshtein, "~> 0.3.0"}
+      {:levenshtein, "~> 0.3.0"},
+      {:gnuplot, "~> 1.22"}
+
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
