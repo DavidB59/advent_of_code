@@ -38,18 +38,14 @@ defmodule Day14 do
     input
     |> parse
     |> do_100_seconds(target, %{})
-
   end
 
   def do_100_seconds(list, target, cycle_check, counter \\ 0) do
-
-
     # if counter == target do\
     if do_I_have_a_line(list) do
       IO.inspect(counter)
       list
     else
-
       list
       |> Enum.map(&move_robot/1)
       |> do_100_seconds(target, cycle_check, counter + 1)
