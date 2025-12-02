@@ -64,7 +64,7 @@ defmodule Day16 do
     # :ets.insert(@cache_name, {{position, direction}, :true})
     Utils.neighbours_no_diagonale(position)
     |> Enum.flat_map(fn {x_new, y_new} = neighbour ->
-      # + 1001 because I turn and move one step at the same tiem
+      # + 1001 because I turn and move one step at the same time
       current_score = if neighbour == next_position, do: score + 1, else: score + 1001
 
       if current_score > minimum do
@@ -129,6 +129,7 @@ defmodule Day16 do
 
     Utils.neighbours_no_diagonale(position)
     |> Enum.flat_map(fn {x_new, y_new} = neighbour ->
+      # + 1001 because I turn and move one step at the same time
       current_score = if neighbour == next_position, do: score + 1, else: score + 1001
 
       case :ets.lookup(@cache_name, neighbour) do

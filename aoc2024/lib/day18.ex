@@ -1,7 +1,7 @@
 defmodule Day18 do
   # @size 70
   # @fallen_bytes 1024
-
+  # need to memorize from the end
   @size 6
   @fallen_bytes 12
   def file do

@@ -3,6 +3,12 @@ defmodule Utils do
     list |> Stream.with_index() |> Enum.reduce(%{}, fn {v, k}, acc -> Map.put(acc, k, v) end)
   end
 
+  def to_xy_map(input) do
+    input
+    |> Utils.to_list_of_list()
+    |> Utils.nested_list_to_xy_map()
+  end
+
   def nested_list_to_xy_map(list) do
     list
     |> Enum.map(&Stream.with_index/1)
@@ -36,6 +42,10 @@ defmodule Utils do
       |> Enum.map(fn {x, y} -> {x, -y} end)
 
     Gnuplot.plot([[:plot, "-", :title, "counter ", :with, :circle]], [list])
+  end
+
+  def manhattan_distance({x1, y1}, {x2, y2}) do
+    abs(x1 - x2) + abs(y1 - y2)
   end
 
   def neighbours_no_diagonale({x, y}) do
