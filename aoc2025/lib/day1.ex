@@ -21,13 +21,12 @@ defmodule Day1 do
     input
     |> parse()
     |> Enum.reduce({50, 0}, fn instructions, {current_pos, counter} ->
-      # |> IO.inspect()
       calculate_next(current_pos, instructions, counter)
     end)
   end
 
   # because if you start a 0, the go_back_to_100 will consider you need to add one to the counter
-  # but you shouldn't because you were alreday at 0
+  # but you shouldn't because you were already at 0
   def calculate_next(0, {"L", number}, counter) do
     go_back_to_100(0 - number, counter - 1)
   end
