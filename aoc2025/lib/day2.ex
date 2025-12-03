@@ -1,11 +1,6 @@
 defmodule Day2 do
-  def file do
-    Parser.read_file(2)
-  end
-
-  def test do
-    Parser.read_file("test")
-  end
+  def file, do: Parser.read_file(2)
+  def test, do: Parser.read_file("test")
 
   def parse(input) do
     input

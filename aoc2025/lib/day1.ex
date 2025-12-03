@@ -1,11 +1,6 @@
 defmodule Day1 do
-  def file do
-    Parser.read_file(1)
-  end
-
-  def test do
-    Parser.read_file("test")
-  end
+  def file, do: Parser.read_file(1)
+  def test, do: Parser.read_file("test")
 
   def parse(input) do
     input

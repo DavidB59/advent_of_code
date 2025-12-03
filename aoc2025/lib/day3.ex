@@ -1,11 +1,6 @@
 defmodule Day3 do
-  def file do
-    Parser.read_file(3)
-  end
-
-  def test do
-    Parser.read_file("test")
-  end
+  def file, do: Parser.read_file(3)
+  def test, do: Parser.read_file("test")
 
   def parse(input) do
     Enum.map(input, fn batteries_bank ->
