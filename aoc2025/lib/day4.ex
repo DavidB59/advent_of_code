@@ -11,15 +11,12 @@ defmodule Day4 do
 
     map
     |> Enum.reduce(0, fn
-      {_pos, "."}, acc ->
-        acc
-
-      {pos, _value}, acc ->
-        if has_four_roll_of_papers?(pos, map), do: acc + 1, else: acc
+      {_pos, "."}, acc -> acc
+      {pos, _value}, acc -> if four_rolls?(pos, map), do: acc + 1, else: acc
     end)
   end
 
-  def has_four_roll_of_papers?(pos, map) do
+  def four_rolls?(pos, map) do
     pos
     |> Utils.neighbours_coordinates()
     |> Enum.filter(fn coord -> Map.get(map, coord) == "@" end)
@@ -42,7 +39,7 @@ defmodule Day4 do
         acc
 
       {pos, _value}, {updated_map, counter} ->
-        if has_four_roll_of_papers?(pos, updated_map) do
+        if four_rolls?(pos, updated_map) do
           {Map.put(updated_map, pos, "."), counter + 1}
         else
           {updated_map, counter}
