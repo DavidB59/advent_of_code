@@ -5,9 +5,11 @@ defmodule Utils do
 
   def to_xy_map(input) do
     input
-    |> Utils.to_list_of_list()
-    |> Utils.nested_list_to_xy_map()
+    |> to_list_of_list()
+    |> nested_list_to_xy_map()
   end
+
+  def to_list_of_list(file), do: Enum.map(file, &String.graphemes/1)
 
   def nested_list_to_xy_map(list) do
     list
@@ -19,8 +21,6 @@ defmodule Utils do
       end)
     end)
   end
-
-  def to_list_of_list(file), do: Enum.map(file, &String.graphemes/1)
 
   def neighbours_coordinates({x, y}) do
     [
