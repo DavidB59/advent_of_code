@@ -6,7 +6,7 @@ defmodule Day4 do
     Utils.to_xy_map(input)
   end
 
-  def solve(input \\ file()) do
+  def part_one(input \\ file()) do
     map = parse(input)
 
     map
@@ -24,7 +24,7 @@ defmodule Day4 do
     |> Kernel.<(4)
   end
 
-  def solve_two(input \\ file()) do
+  def part_two(input \\ file()) do
     map = parse(input)
     remove_rolls({map, 0})
   end

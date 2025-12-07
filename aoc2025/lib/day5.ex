@@ -25,7 +25,7 @@ defmodule Day5 do
     |> Enum.map(&String.to_integer/1)
   end
 
-  def solve(input \\ file()) do
+  def part_one(input \\ file()) do
     %{ranges: ranges, ingredients: ingredients} = parse(input)
 
     ingredients
@@ -35,7 +35,7 @@ defmodule Day5 do
 
   def is_fresh?(ingredient, [a, b]), do: ingredient >= a and ingredient <= b
 
-  def solve_two(input \\ file()) do
+  def part_two(input \\ file()) do
     input
     |> parse
     |> Map.get(:ranges)

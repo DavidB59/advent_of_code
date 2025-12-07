@@ -10,14 +10,14 @@ defmodule Day3 do
     end)
   end
 
-  def solve(input \\ file()) do
+  def part_one(input \\ file()) do
     input
     |> parse()
     |> Enum.map(&find_max(&1, 2))
     |> Enum.sum()
   end
 
-  def solve_two(input \\ file()) do
+  def part_two(input \\ file()) do
     input
     |> parse()
     |> Enum.map(&find_max(&1, 12))

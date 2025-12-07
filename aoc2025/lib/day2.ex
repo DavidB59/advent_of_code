@@ -9,7 +9,7 @@ defmodule Day2 do
     |> Enum.map(&(&1 |> String.split("-") |> Enum.map(fn a -> String.to_integer(a) end)))
   end
 
-  def solve(input \\ file()) do
+  def part_one(input \\ file()) do
     input
     |> parse()
     |> Enum.reduce([], fn range, acc ->
@@ -20,7 +20,7 @@ defmodule Day2 do
     |> Enum.sum()
   end
 
-  def solve_two(input \\ file()) do
+  def part_two(input \\ file()) do
     input
     |> parse()
     |> Enum.reduce([], fn range, acc ->

@@ -12,7 +12,7 @@ defmodule Day1 do
   def get_number("L" <> nb), do: {"L", String.to_integer(nb)}
   def get_number(a), do: IO.inspect(a)
 
-  def solve(input \\ file()) do
+  def part_one(input \\ file()) do
     input
     |> parse()
     |> Enum.reduce({50, 0}, fn instructions, {current_pos, counter} ->

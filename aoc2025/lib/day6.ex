@@ -6,7 +6,7 @@ defmodule Day6 do
     input
   end
 
-  def solve(input \\ file()) do
+  def part_one(input \\ file()) do
     input
     |> Enum.reduce(%{}, fn line, acc ->
       line
@@ -30,7 +30,7 @@ defmodule Day6 do
   def calculate(list, "+"), do: Enum.sum(list)
   def calculate(list, "*"), do: Enum.product(list)
 
-  def solve_two(input \\ file()) do
+  def part_two(input \\ file()) do
     {operator_line, number_lines} = Enum.map(input, &String.graphemes/1) |> List.pop_at(-1)
 
     operator_line
@@ -62,7 +62,8 @@ defmodule Day6 do
     end)
     |> Map.values()
     |> Enum.map(fn list ->
-      Enum.join(list)
+      list
+      |> Enum.join()
       |> String.trim()
       |> String.reverse()
     end)
